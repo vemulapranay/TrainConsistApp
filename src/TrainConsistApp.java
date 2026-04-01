@@ -1,31 +1,41 @@
 import java.util.*;
 
-// Main class
 public class TrainConsistApp {
 
     public static void main(String[] args) {
 
-        System.out.println("=== Train Consist Management App (UC3: Unique Bogie IDs) ===");
+        System.out.println("=== Train Consist Management App (UC4: Ordered Bogie IDs) ===");
 
-        // Create a HashSet for bogie IDs
-        Set<String> bogieIDs = new HashSet<>();
+        // Initialize LinkedList for train consist
+        LinkedList<String> trainConsist = new LinkedList<>();
 
-        // Add bogie IDs (including duplicates)
-        bogieIDs.add("BG101");
-        bogieIDs.add("BG102");
-        bogieIDs.add("BG103");
-        bogieIDs.add("BG101"); // duplicate
-        bogieIDs.add("BG102"); // duplicate
+        // Add bogies
+        trainConsist.add("Engine");
+        trainConsist.add("Sleeper");
+        trainConsist.add("AC");
+        trainConsist.add("Cargo");
+        trainConsist.add("Guard");
 
-        // Display unique bogie IDs
-        System.out.println("\nBogie IDs after insertion (duplicates removed automatically):");
-        System.out.println(bogieIDs);
+        System.out.println("\nInitial Train Consist:");
+        System.out.println(trainConsist);
 
-        // Check existence
-        if (bogieIDs.contains("BG101")) {
-            System.out.println("\nBogie BG101 exists in the train.");
+        // Insert Pantry Car at position 2 (0-based index)
+        trainConsist.add(2, "Pantry Car");
+
+        System.out.println("\nAfter adding Pantry Car at position 2:");
+        System.out.println(trainConsist);
+
+        // Remove first and last bogie
+        trainConsist.removeFirst(); // removes Engine
+        trainConsist.removeLast();  // removes Guard
+
+        System.out.println("\nAfter removing first and last bogies:");
+        System.out.println(trainConsist);
+
+        // Display final consist
+        System.out.println("\nFinal Ordered Train Consist:");
+        for (String bogie : trainConsist) {
+            System.out.println("- " + bogie);
         }
-
-        System.out.println("\nTotal unique bogies: " + bogieIDs.size());
     }
 }
