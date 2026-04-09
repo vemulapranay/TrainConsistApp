@@ -2,8 +2,12 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+<<<<<<< HEAD
       <module fileurl="file://$PROJECT_DIR$/TrainConistManagment.iml" filepath="$PROJECT_DIR$/TrainConistManagment.iml" />
       <module fileurl="file://$PROJECT_DIR$/main/main.iml" filepath="$PROJECT_DIR$/main/main.iml" />
+=======
+      <module fileurl="file://$PROJECT_DIR$/.idea/B2P19_RA2411003011819.iml" filepath="$PROJECT_DIR$/.idea/B2P19_RA2411003011819.iml" />
+>>>>>>> 334875e (Base application setup)
     </modules>
   </component>
 </project>
