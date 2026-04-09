@@ -1,73 +1,44 @@
 import java.util.*;
+import java.util.stream.Collectors;
 
-// Bogie class with name and capacity
+// Base Bogie class
 class Bogie {
-    String name;
+    String type;
     int capacity;
 
-    // Constructor
-    public Bogie(String name, int capacity) {
-        this.name = name;
+    public Bogie(String type, int capacity) {
+        this.type = type;
         this.capacity = capacity;
     }
 
-    // To display bogie information
     @Override
     public String toString() {
-        return name + " (" + capacity + " seats)";
+        return "Bogie Type: " + type + ", Capacity: " + capacity;
     }
 }
 
 public class TrainConsistApp {
 
     public static void main(String[] args) {
-        System.out.println("=== Train Consist Management App (UC7: Sort Bogies by Capacity) ===\n");
 
-        // Create a list of passenger bogies
-        List<Bogie> passengerBogies = new ArrayList<>();
-        passengerBogies.add(new Bogie("Sleeper", 72));
-        passengerBogies.add(new Bogie("AC Chair", 54));
-        passengerBogies.add(new Bogie("First Class", 36));
-        passengerBogies.add(new Bogie("AC 3 Tier", 64));
+        // Step 1: Create list of bogies (reuse from UC7)
+        List<Bogie> bogies = new ArrayList<>();
+        bogies.add(new Bogie("Sleeper", 72));
+        bogies.add(new Bogie("AC Chair", 60));
+        bogies.add(new Bogie("First Class", 50));
+        bogies.add(new Bogie("Sleeper", 80));
 
-        System.out.println("Passenger Bogies (Unsorted):");
-        for (Bogie b : passengerBogies) {
-            System.out.println("- " + b);
-        }
+        // Step 2: Convert list to stream and filter
+        List<Bogie> filteredBogies = bogies.stream()
+                .filter(b -> b.capacity > 60)   // condition
+                .collect(Collectors.toList());
 
-        // Sort using Comparator by capacity in ascending order
-        passengerBogies.sort(Comparator.comparingInt(b -> b.capacity));
+        // Step 3: Display filtered bogies
+        System.out.println("Filtered Bogies (Capacity > 60):");
+        filteredBogies.forEach(System.out::println);
 
-        System.out.println("\nPassenger Bogies (Sorted by Capacity):");
-        for (Bogie b : passengerBogies) {
-            System.out.println("- " + b);
-        }
-
-        // Optional: sort in descending order
-        passengerBogies.sort(Comparator.comparingInt(Bogie::getCapacity).reversed());
-        System.out.println("\nPassenger Bogies (Sorted by Capacity Descending):");
-        for (Bogie b : passengerBogies) {
-            System.out.println("- " + b);
-        }
-    }
-}
-
-// Adding a getter to Bogie class for descending sort
-class BogieWithGetter {
-    String name;
-    int capacity;
-
-    public BogieWithGetter(String name, int capacity) {
-        this.name = name;
-        this.capacity = capacity;
-    }
-
-    public int getCapacity() {
-        return capacity;
-    }
-
-    @Override
-    public String toString() {
-        return name + " (" + capacity + " seats)";
+        // Step 4: Verify original list unchanged
+        System.out.println("\nOriginal Bogies:");
+        bogies.forEach(System.out::println);
     }
 }
