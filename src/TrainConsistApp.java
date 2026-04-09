@@ -1,5 +1,5 @@
 import java.util.*;
-import java.util.stream.*;
+import java.util.stream.Collectors;
 
 class Bogie {
     String type;
@@ -13,34 +13,46 @@ class Bogie {
     public int getCapacity() {
         return capacity;
     }
-
-    @Override
-    public String toString() {
-        return type + " - Capacity: " + capacity;
-    }
 }
 
-public class TrainConsistApp {
+public class TrainPerformanceApp {
 
     public static void main(String[] args) {
 
-        // Step 1: Create bogie list (reuse from UC9)
+        // Step 1: Create large dataset
         List<Bogie> bogies = new ArrayList<>();
-        bogies.add(new Bogie("Sleeper", 72));
-        bogies.add(new Bogie("AC Chair", 60));
-        bogies.add(new Bogie("First Class", 50));
-        bogies.add(new Bogie("Sleeper", 80));
+        for (int i = 0; i < 100000; i++) {
+            bogies.add(new Bogie("Sleeper", (i % 100) + 40));
+        }
 
-        // Step 2: Stream → map → reduce
-        int totalSeats = bogies.stream()
-                .map(b -> b.getCapacity())     // extract capacity
-                .reduce(0, Integer::sum);      // aggregate sum
+        // ---------------- LOOP APPROACH ----------------
+        long startLoop = System.nanoTime();
 
-        // Step 3: Display result
-        System.out.println("Total Seating Capacity: " + totalSeats);
+        List<Bogie> loopResult = new ArrayList<>();
+        for (Bogie b : bogies) {
+            if (b.getCapacity() > 60) {
+                loopResult.add(b);
+            }
+        }
 
-        // Step 4: Verify original list unchanged
-        System.out.println("\nOriginal Bogies:");
-        bogies.forEach(System.out::println);
+        long endLoop = System.nanoTime();
+        long loopTime = endLoop - startLoop;
+
+        // ---------------- STREAM APPROACH ----------------
+        long startStream = System.nanoTime();
+
+        List<Bogie> streamResult = bogies.stream()
+                .filter(b -> b.getCapacity() > 60)
+                .collect(Collectors.toList());
+
+        long endStream = System.nanoTime();
+        long streamTime = endStream - startStream;
+
+        // ---------------- OUTPUT ----------------
+        System.out.println("Loop Result Size: " + loopResult.size());
+        System.out.println("Stream Result Size: " + streamResult.size());
+
+        System.out.println("\nLoop Time (ns): " + loopTime);
+        System.out.println("Stream Time (ns): " + streamTime);
     }
 }
