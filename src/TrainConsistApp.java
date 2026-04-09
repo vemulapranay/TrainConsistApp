@@ -1,7 +1,6 @@
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.stream.*;
 
-// Base Bogie class
 class Bogie {
     String type;
     int capacity;
@@ -11,9 +10,13 @@ class Bogie {
         this.capacity = capacity;
     }
 
+    public int getCapacity() {
+        return capacity;
+    }
+
     @Override
     public String toString() {
-        return "Bogie Type: " + type + ", Capacity: " + capacity;
+        return type + " - Capacity: " + capacity;
     }
 }
 
@@ -21,21 +24,20 @@ public class TrainConsistApp {
 
     public static void main(String[] args) {
 
-        // Step 1: Create list of bogies (reuse from UC7)
+        // Step 1: Create bogie list (reuse from UC9)
         List<Bogie> bogies = new ArrayList<>();
         bogies.add(new Bogie("Sleeper", 72));
         bogies.add(new Bogie("AC Chair", 60));
         bogies.add(new Bogie("First Class", 50));
         bogies.add(new Bogie("Sleeper", 80));
 
-        // Step 2: Convert list to stream and filter
-        List<Bogie> filteredBogies = bogies.stream()
-                .filter(b -> b.capacity > 60)   // condition
-                .collect(Collectors.toList());
+        // Step 2: Stream → map → reduce
+        int totalSeats = bogies.stream()
+                .map(b -> b.getCapacity())     // extract capacity
+                .reduce(0, Integer::sum);      // aggregate sum
 
-        // Step 3: Display filtered bogies
-        System.out.println("Filtered Bogies (Capacity > 60):");
-        filteredBogies.forEach(System.out::println);
+        // Step 3: Display result
+        System.out.println("Total Seating Capacity: " + totalSeats);
 
         // Step 4: Verify original list unchanged
         System.out.println("\nOriginal Bogies:");
