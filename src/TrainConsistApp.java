@@ -1,34 +1,58 @@
-import java.util.regex.*;
+import java.util.*;
+import java.util.stream.Collectors;
 
-public class TrainValidationApp {
+class Bogie {
+    String type;
+    int capacity;
+
+    public Bogie(String type, int capacity) {
+        this.type = type;
+        this.capacity = capacity;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+}
+
+public class TrainPerformanceApp {
 
     public static void main(String[] args) {
 
-        // Sample inputs (you can replace with Scanner input)
-        String trainId = "TRN-1234";
-        String cargoCode = "PET-AB";
+        // Step 1: Create large dataset
+        List<Bogie> bogies = new ArrayList<>();
+        for (int i = 0; i < 100000; i++) {
+            bogies.add(new Bogie("Sleeper", (i % 100) + 40));
+        }
 
-        // Step 1: Define regex patterns
-        String trainPattern = "TRN-\\d{4}";
-        String cargoPattern = "PET-[A-Z]{2}";
+        // ---------------- LOOP APPROACH ----------------
+        long startLoop = System.nanoTime();
 
-        // Step 2: Compile patterns
-        Pattern trainIdPattern = Pattern.compile(trainPattern);
-        Pattern cargoCodePattern = Pattern.compile(cargoPattern);
+        List<Bogie> loopResult = new ArrayList<>();
+        for (Bogie b : bogies) {
+            if (b.getCapacity() > 60) {
+                loopResult.add(b);
+            }
+        }
 
-        // Step 3: Create matchers
-        Matcher trainMatcher = trainIdPattern.matcher(trainId);
-        Matcher cargoMatcher = cargoCodePattern.matcher(cargoCode);
+        long endLoop = System.nanoTime();
+        long loopTime = endLoop - startLoop;
 
-        // Step 4: Validate using matches()
-        boolean isTrainValid = trainMatcher.matches();
-        boolean isCargoValid = cargoMatcher.matches();
+        // ---------------- STREAM APPROACH ----------------
+        long startStream = System.nanoTime();
 
-        // Step 5: Display results
-        System.out.println("Train ID: " + trainId + " -> " +
-                (isTrainValid ? "Valid" : "Invalid"));
+        List<Bogie> streamResult = bogies.stream()
+                .filter(b -> b.getCapacity() > 60)
+                .collect(Collectors.toList());
 
-        System.out.println("Cargo Code: " + cargoCode + " -> " +
-                (isCargoValid ? "Valid" : "Invalid"));
+        long endStream = System.nanoTime();
+        long streamTime = endStream - startStream;
+
+        // ---------------- OUTPUT ----------------
+        System.out.println("Loop Result Size: " + loopResult.size());
+        System.out.println("Stream Result Size: " + streamResult.size());
+
+        System.out.println("\nLoop Time (ns): " + loopTime);
+        System.out.println("Stream Time (ns): " + streamTime);
     }
 }
